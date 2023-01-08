@@ -1,15 +1,15 @@
 <div class="container">
   <div class="container__form">
-    <div class="form__color__picker">
-      <input
-        type="color"
-        id="head"
-        name="head"
-        [(ngModel)]="selectedColor"
-        (input)="onColorChange($event)"
-      />
-      <label for="head">Panel color</label>
+    <div class="dx-card">
+      <h2 class="dx-theme-accent-as-text-color">Led panel color</h2>
+      <hr class="dx-theme-border-color" />
+      <dx-color-box
+        class="dx-theme-accent-as-text-color"
+        [(value)]="selectedColor"
+        (valueChange)="onColorChange($event)"
+        applyValueMode="instantly"
+      ></dx-color-box>
+      <div class="card__footer"></div>
     </div>
-    <div class="form__submit"></div>
   </div>
 </div>

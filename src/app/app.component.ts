@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, debounceTime, Subscription } from 'rxjs';
 import { ColorService } from './services/color.service';
 @Component({
   selector: 'app-root',
@@ -6,13 +7,27 @@ import { ColorService } from './services/color.service';
   styleUrls: ['./app.component.less'],
   providers: [ColorService],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'ng-led-panel';
-  selectedColor = '#e66465';
-  constructor(private colorService: ColorService) {}
-  ngOnInit(): void {}
+  defaultColor = '#e66465';
+  selectedColor$ = new BehaviorSubject(this.defaultColor);
+  selectedColorSubs$!: Subscription;
 
-  onColorChange(event: string) {
-    this.colorService.setColor(this.selectedColor);
+  constructor(private colorService: ColorService) {}
+
+  ngOnInit(): void {
+    this.selectedColorSubs$ = this.selectedColor$
+      .pipe(debounceTime(500))
+      .subscribe((color) => {
+        this.colorService.setColor(color);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.selectedColorSubs$.unsubscribe();
+  }
+
+  onColorChange(color: string) {
+    this.selectedColor$.next(color);
   }
 }

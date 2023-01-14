@@ -5,7 +5,7 @@
       <hr class="dx-theme-border-color" />
       <dx-color-box
         class="dx-theme-accent-as-text-color"
-        [(value)]="selectedColor"
+        [value]="(selectedColor$ | async) || defaultColor"
         (valueChange)="onColorChange($event)"
         applyValueMode="instantly"
         [acceptCustomValue]="false"
